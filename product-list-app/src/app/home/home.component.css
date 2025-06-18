@@ -1,0 +1,76 @@
+.wrapper-cart {
+  background-image: linear-gradient(to right, #d434b0, #8029fc);
+  padding: 0.5rem;
+  display: flex;
+  border-radius: 10px;
+  align-items: center;
+  cursor: pointer;
+  height: calc(100vh - 70px);
+}
+
+/* styles.css hoặc component.css */
+
+.container {
+  padding: 24px;
+  font-family: Arial, sans-serif;
+  background-color: #fdfdfd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  max-width: 800px;
+  margin: 32px auto;
+}
+
+.money {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.visible-box {
+  background-color: #e3f2fd;
+  padding: 12px;
+  border: 1px solid #90caf9;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  color: #0d47a1;
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  margin-bottom: 20px;
+}
+
+.product-table thead {
+  background-color: #1976d2;
+  color: white;
+}
+
+.product-table th,
+.product-table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ccc;
+}
+
+.product-table tbody tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+.primary-btn {
+  padding: 12px 20px;
+  font-size: 16px;
+  color: white;
+  background-color: #1976d2;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}

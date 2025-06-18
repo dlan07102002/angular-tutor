@@ -1,0 +1,22 @@
+<ng-container *ngIf="product">
+  <tr>
+    <td>
+      <a [routerLink]="['/detail', product.id]">{{ product.id }}</a>
+    </td>
+    <td>
+      <a [routerLink]="['/detail', product.id]">
+        {{ product.name | upperCasePipe }}
+      </a>
+    </td>
+    <td>{{ product.description }}</td>
+    <td>{{ product.price | currencyPipe }}</td>
+    <td [ngClass]="product.inStock ? 'text-success' : 'text-danger'">
+      {{ product.inStock ? "Remain" : "Out of stock" }}
+    </td>
+    <td style="display: flex; align-items: center; justify-content: center">
+      <button (click)="handleDelete(product.id)">
+        <img width="20px" src="assets/images/trash.jpg" alt="Delete" />
+      </button>
+    </td>
+  </tr>
+</ng-container>

@@ -1,0 +1,40 @@
+<table class="product-table">
+  <thead>
+    <tr>
+      <th>{{ "id" | upperCasePipe }}</th>
+      <th>{{ "Name" | upperCasePipe }}</th>
+      <th>{{ "Description" | upperCasePipe }}</th>
+      <th>{{ "Price" | upperCasePipe }}</th>
+      <th>{{ "In Stock" | upperCasePipe }}</th>
+      <th>{{ "Action" | upperCasePipe }}</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let product of products; trackBy: trackById">
+      <td>
+        <a [routerLink]="['/detail', product.id]">{{ product.id }}</a>
+      </td>
+      <td>
+        <a [routerLink]="['/detail', product.id]">
+          {{ product.name | upperCasePipe }}
+        </a>
+      </td>
+      <td>{{ product.description }}</td>
+      <td>{{ product.price | currencyPipe }}</td>
+      <td [ngClass]="product.inStock ? 'text-success' : 'text-danger'">
+        {{ product.inStock ? "Remain" : "Out of stock" }}
+      </td>
+      <td style="display: flex; align-items: center; justify-content: center">
+        <button (click)="handleDelete(product.id)">
+          <img width="20px" src="assets/images/trash.jpg" alt="Delete" />
+        </button>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="6" style="text-align: right">{{ totalPrice }}</td>
+    </tr>
+  </tfoot>
+</table>

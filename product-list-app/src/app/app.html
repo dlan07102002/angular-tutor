@@ -1,15 +1,5 @@
 <main class="main">
   <header-layout></header-layout>
-  <h1>{{title.name}}</h1>
-  <div>{{title.old + 1}}</div>
-  <button (click)="handleClickMe()">{{nameBtn}}</button>
-  <div class="">
-    Message: {{clickMessage}}
-    <input type="text" [(ngModel)]="bindingMessage" />
-  </div>
-  <div>From: {{bindingMessage}}</div>
-
-  <button [disabled]="isDisable" (click)="showAlert()">Hello world</button>
 </main>
 
 <router-outlet />

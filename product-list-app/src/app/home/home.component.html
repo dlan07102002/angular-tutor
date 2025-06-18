@@ -1,0 +1,13 @@
+<!-- app.component.html -->
+<div class="container">
+  <app-product-list
+    [products]="products"
+    (deleteEvent)="handleDelete($event)"
+  ></app-product-list>
+</div>
+
+<div class="" style="text-align: center">
+  <button class="primary-btn" [disabled]="isDisable" (click)="showAlert()">
+    Hello world
+  </button>
+</div>
