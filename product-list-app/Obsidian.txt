@@ -1,0 +1,19 @@
+#### ngOnChanges: Will update and re run if props has changed. This function is good for performance -> higher priority
+- Run when props re create state (assign new values)
+#### ngDoCheck: Run if any thing changed (state, content, DOM,... ) -> This use for special case. Destroy when not use
+
+#### Destruction (ngOnDestroy):
+- Run before component destroy
+- Realtime
+- API
+- Logic (timeout, interval...)
+
+#### Http Client
+- provideHttpClient((withFetch()))
+- Use in ngOnInit(): void {
+    this.http.get<any>(...).subscribe(({data}) => ....)
+}
+
+#### Http Service -> Optimize call API
+
+#### Observable
