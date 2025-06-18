@@ -1,0 +1,25 @@
+.header-logo svg {
+  width: 100px;
+}
+
+.group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: rgb(0, 0, 0, 0.15) 1px 1px 10px 0;
+  padding: 0.6rem 1rem;
+}
+
+.group-header .group-nav {
+  display: flex;
+  column-gap: 2rem;
+}
+
+.btn-nav {
+  background-image: linear-gradient(to right, #d434b0, #8029fc);
+  padding: 0.5rem;
+  display: flex;
+  border-radius: 10px;
+  align-items: center;
+  cursor: pointer;
+}
