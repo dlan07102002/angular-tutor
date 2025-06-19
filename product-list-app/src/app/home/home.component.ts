@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CurrencyPipe } from '../shared/header-layout/pipes/CurrencyPipe.pipe';
 import { UpperCasePipe } from '../shared/header-layout/pipes/UpperCasePipe.pipe';
@@ -8,9 +14,11 @@ import { ProductItem } from '../shared/types/productItem';
 import { ProductListComponent } from '../shared/product-list/product-list.component';
 import { HttpClient } from '@angular/common/http';
 import { BlogService } from '../../services/BlogService';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   imports: [
     FormsModule,
     CurrencyPipe,
@@ -23,17 +31,27 @@ import { BlogService } from '../../services/BlogService';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
+  isVisible = true;
+
+  handleShow() {
+    this.isVisible = !this.isVisible;
+    console.log(this.isVisible);
+  }
+
   products: ProductItem[] = [];
 
   // Constructor cho phép import service, directive từ file, components
   constructor(private blogService: BlogService) {
     console.log('Initialize Component');
+    this.getBlogApi = new Subscription();
   }
+
+  getBlogApi: Subscription;
 
   // Làm việc và tương tác với api, chạy sau constructor
   ngOnInit(): void {
-    this.blogService.getBlogs().subscribe(
+    this.getBlogApi = this.blogService.getBlogs().subscribe(
       ({ data }) =>
         (this.products = data.map((item: any) => ({
           ...item,
@@ -44,15 +62,18 @@ export class HomeComponent implements OnInit {
     );
   }
 
+  ngOnDestroy(): void {
+    if (this.getBlogApi) {
+      this.getBlogApi.unsubscribe();
+      console.log('getBlogApi unsubscribed');
+    }
+  }
+
   nameBtn = 'Click me';
 
   clickMessage = '';
 
   bindingMessage = '';
-
-  // ngDoCheck(): void {
-  //   console.log('Check component');
-  // }
 
   handleClickMe(): void {
     if (this.clickMessage) {

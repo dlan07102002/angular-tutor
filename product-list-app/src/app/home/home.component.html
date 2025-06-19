@@ -1,7 +1,9 @@
 <!-- app.component.html -->
-<div class="container">
+<div class="container" *ngIf="isVisible">
   <app-product-list
     [products]="products"
     (deleteEvent)="handleDelete($event)"
   ></app-product-list>
 </div>
+
+<div><button (click)="handleShow()">Click to hide</button></div>
