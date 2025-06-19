@@ -15,11 +15,20 @@ import { RouterLink } from '@angular/router';
 import { CurrencyPipe } from '../header-layout/pipes/CurrencyPipe.pipe';
 import { interval, Subscription } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
+import { CounterComponent } from '../counter/counter.component';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [RouterLink, UpperCasePipe, NgFor, NgClass, NgIf, CurrencyPipe],
+  imports: [
+    RouterLink,
+    UpperCasePipe,
+    NgFor,
+    NgClass,
+    NgIf,
+    CurrencyPipe,
+    CounterComponent,
+  ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css',
 })
