@@ -1,0 +1,30 @@
+<div class="form-container" [formGroup]="product">
+  <div>
+    <label for="name">Name:</label>
+    <!-- <input formControlName="name" /> -->
+    <input type="text" id="name" formControlName="name" />
+  </div>
+
+  <div *ngIf="name?.dirty || name?.touched">
+    <div style="color: red" *ngIf="name?.hasError('required')">
+      Name is required
+    </div>
+  </div>
+
+  <div>
+    <label for="price">Price:</label>
+    <input type="text" id="price" formControlName="price" />
+  </div>
+  <div *ngIf="price?.dirty || price?.touched">
+    <div style="color: red" *ngIf="price?.hasError('required')">
+      price is required
+    </div>
+  </div>
+
+  <div>
+    <label for="description">Description:</label>
+    <input type="text" id="description" formControlName="description" />
+  </div>
+
+  <button type="submit" (click)="handleAddToCart()">Submit</button>
+</div>

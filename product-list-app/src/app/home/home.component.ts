@@ -14,7 +14,7 @@ import { ProductItem } from '../shared/types/productItem';
 import { ProductListComponent } from '../shared/product-list/product-list.component';
 import { HttpClient } from '@angular/common/http';
 import { BlogService } from '../../services/BlogService';
-import { interval, Subscription } from 'rxjs';
+import { interval, map, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -51,15 +51,24 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   // Làm việc và tương tác với api, chạy sau constructor
   ngOnInit(): void {
-    this.getBlogApi = this.blogService.getBlogs().subscribe(
-      ({ data }) =>
-        (this.products = data.map((item: any) => ({
-          ...item,
-          price: Number(item.body),
-          name: item.title,
-          description: item.author,
-        })))
-    );
+    this.getBlogApi = this.blogService
+      .getBlogs()
+      .pipe(
+        map(({ data }) =>
+          data
+            .map((item: any) => ({
+              ...item,
+              price: Number(item.body),
+              name: item.title,
+              description: item.author,
+              inStock: false,
+            }))
+            .filter((item) => item.price > 300000)
+        )
+      )
+      .subscribe((res) => {
+        this.products = res;
+      });
   }
 
   ngOnDestroy(): void {
@@ -86,7 +95,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   handleDelete(id: number): void {
-    this.products = this.products.filter((val) => val.id !== id);
-    console.log(this.products.filter((val) => val.id !== id));
+    this.blogService.deleteBlog(id).subscribe(({ data }: any) => {
+      if (data == 1) {
+        this.products = this.products.filter((val) => val.id !== id);
+      }
+    });
   }
 }

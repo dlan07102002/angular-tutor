@@ -5,3 +5,10 @@ export type ProductItem = {
   price: number;
   inStock: boolean;
 };
+
+export type BlogItem = {
+  id?: number;
+  title?: string;
+  author?: string;
+  body?: string;
+};

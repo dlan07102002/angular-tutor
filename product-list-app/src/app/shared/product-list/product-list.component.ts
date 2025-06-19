@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   Input,
+  NgZone,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -9,12 +10,11 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { ProductItem } from '../types/productItem';
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { UpperCasePipe } from '../header-layout/pipes/UpperCasePipe.pipe';
 import { RouterLink } from '@angular/router';
 import { CurrencyPipe } from '../header-layout/pipes/CurrencyPipe.pipe';
 import { interval, Subscription } from 'rxjs';
-import { ChangeDetectorRef } from '@angular/core';
 import { CounterComponent } from '../counter/counter.component';
 
 @Component({
@@ -28,6 +28,7 @@ import { CounterComponent } from '../counter/counter.component';
     NgIf,
     CurrencyPipe,
     CounterComponent,
+    AsyncPipe,
   ],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css',
@@ -38,21 +39,15 @@ export class ProductListComponent implements OnChanges, OnDestroy, OnInit {
   }
   @Input() products: ProductItem[] = [];
 
-  constructor(private cdr: ChangeDetectorRef) {
+  subscription: Subscription;
+
+  constructor(private zone: NgZone) {
     this.subscription = new Subscription();
   }
-
-  subscription: Subscription;
-  counter = 0;
-
+  counter$ = interval(1000);
   ngOnInit(): void {
-    this.subscription = interval(1000).subscribe(() => {
-      console.log(this.counter);
-      this.cdr.detectChanges(); // <- this forces the view to update
-      this.counter++;
-    });
+    this.subscription = this.counter$.subscribe((val) => console.log(val));
   }
-
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();

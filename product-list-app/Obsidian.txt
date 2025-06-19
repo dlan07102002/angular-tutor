@@ -1,0 +1,339 @@
+#### Install diff version of Angular in your lap
+If you want to **create an Angular 14 project without changing your global CLI version**, use:
+`npx -p @angular/cli@14 ng new my-angular14-app`
+
+#### Create a new Angular 14 project
+```
+ng new my-angular14-app
+cd my-angular14-app
+ng serve
+```
+
+#### 2. Introduction
+Cons:
+- A Typescript Framework, make ease to dev a web with structured, ease to manage and maintain
+- Two-way binding between model and view
+- Angular has almost things you need (router, uri , .... )
+- Both Angular and React are designed to serve SPA website. Only one HTML loaded and navigate between "page" controlled by JavaScript to avoid reload entire pages.
+
+Pros:
+- Angular doesn't has Virtual DOM like React -> Update DOM < React
+- Angular is big framework with complexity > React
+
+#### 3. Template
+- Angular use tree folder for template and router
+- 1 module need:  html (templateUrl), css (styleUrl) and file component.
+-> File component will handle business logic (call api, manipulate data ...)
+-> File html will handle show view for user
+
+#### 4. Component
+- Default Angular (from 14+) use standalone mode -> not use NgModule 
+- If using NgModule: 
+- 
+```🔹 **Không standalone → `declarations`**  
+🔹 **Có `standalone: true` → `imports`**
+
+#### 5. Css and config angular.json
+Mục đích chính của `"assets"`:
+> 👉 **Để đưa các tài nguyên tĩnh vào ứng dụng build**, như: hình ảnh, file JSON, font, icon, favicon, PDF, video...
+
+
+#### 6. Dynamic Text, Properties, Attributes
+Text: show the value from the logic code to view -> use the second curly brackets {{text}} to render.
+Properties: eg: disable, ...
+Attributes:
+```export class App {
+  // Text
+  protected title = {
+    name: 'Duclan',
+    old: 2024,
+  };
+  // Properties
+  isDisable = false;
+  // Attributes
+  contentImage = 'Duclan Welcome';
+  showAlert() {
+    alert(this.contentImage);
+  }
+}
+```
+#### 7. Event: 
+Angular has  **change detection** auto tracking state changed.
+
+if you use js vanilla event like `onclick`, Angular:
+- not track on click event
+- doesn't re check DOM
+- view not update
+
+```
+|HTML                    |    Angular          |
+|`onclick`               |`(click)`            |
+|`oninput`               |`(input)`            |
+|`onchange`              |`(change)`           |
+|`onkeyup`               |`(keyup)`            | 
+```
+
+#### 8. Two way binding
+The syntax for two way binding in Angular:
+`<input [(ngModel)]="yourVariable" />`
+- `[(ngModel)]` is **syntactic sugar** for `bind` + `event`, same as:
+`<input [ngModel]="yourVariable" (ngModelChange)="yourVariable = $event" />`
+
+#### 9. Pipes
+- Transfer data type from A to B like you want
+Eg: 
+```
+import { Pipe, PipeTransform } from '@angular/core';
+@Pipe({
+  name: 'currencyPipe', -> your pipe name
+  standalone: true, -> standalone component
+})
+export class CurrencyPipe implements PipeTransform {
+  transform(value: number) {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(value);
+  }
+}
+```
+->
+``` file: app.html
+  <div>
+    <p>{{4000000 | currencyPipe}}</p>
+    <p>{{'legend' | upperCasePipe}}</p>
+  </div>
+```
+
+#### 10. Render list
+- To render list in Angular -> Using syntax below:
+	- Import NgFor class to use *ngFor (if using standalone)
+	-  Use it like a sample: ```
+<tr *ngFor="let product of products; trackBy: trackById">...
+
+Note: In angular 17 -> new syntax
+@for (item of items; track item.id) {
+  <div>{{ item.name }}</div>
+}
+-> Angular Control Flow syntax, replace for *ngFor, *ngIf, *ngSwitch, v.v.
+
+#### 11. Directive
+- Angular has 3 main directives:
+	- Component
+	- Structural
+	- Attribute
+- Also can custom directives
+##### a. Component
+- Template HTML
+- UI - Component
+##### b. Structural: change the DOM structure
+- ngIf, ngFor, ngSwitch
+
+##### c. Attribute: change the interface and behavior of an element but can not deleted like Structural 
+- ngClass, ngStyle, hidden, disable...
+
+###### In origin Angular (`NgModule`), don't need to import `NgClass` 
+
+```@NgModule({
+	declarations: [MyComponent],   
+	imports: [CommonModule],  // ✅ NgClass nằm trong đây 
+	}) export class MyModule {}```
+
+➡️ `CommonModule` includes some popular directive like:
+- `NgIf`  
+- `NgFor`
+- `NgClass`
+- `NgStyle` ```
+```
+
+#### 12. Routing
+- Config in app.route.ts
+```
+import { Routes } from '@angular/router';
+import { HomeComponent } from './home/home.component';
+import { DetailComponent } from './detail/detail.component';
+// File chứa đường dẫn
+export const routes: Routes = [
+  {
+    path: '',
+    component: HomeComponent,
+  },
+  {
+    path: 'detail/:id',
+    component: DetailComponent,
+  },
+];
+```
+- Import RouterLink to navigate in Angular
+```
+    <a [routerLink]="['/detail', product.id]">
+	  {{product.name | upperCasePipe}}
+	</a>
+```
+
+#### 13. Props
+- One Way Passing: From Parent Component to Child Component
+- Can not change the data: Child Component can not directly modify props value
+- Support all data types: String, number, object, array, function
+Handle Pass props in angular
+- Defining a type of your data (In case you use specific object like ProductItem, eg)
+- To receive data from parent component, define @Input in the child component
+```
+export class ProductListComponent {
+  @Input() products: ProductItem[] = [];
+}
+```
+- After that, you could pass prop with below syntax: 
+```
+<tbody>
+  <tr *ngFor="let product of products; trackBy: trackById">
+    <app-product-item [product]="product"></app-product-item>
+  </tr>
+</tbody>
+```
+
+#### 14. Function props
+- Pass data from child to parent component
+- Step 1: Create `@Output() dataEvent = new EventEmitter<number>()`
+- Step 2: Create a function: `handleDataEvent = (attr: ) => {this.dataEvent.emit(attr)}`
+- Step 3: Define the handle event in html file:
+```
+ <button (click)="handleData(product.id)">
+            <img width="20px" src="assets/.." alt="Data" />
+ </button>
+```
+- Step 4: In parent component
+```
+<!-- parent.component.html -->
+<app-child (dataEvent)="handleData($event)"></app-child> -> 
+```
+
+#### 15. Getter
+- Use to calculate and handle data, return the data, always sync with the state defined
+- Otherwise, Getter is one way to create a read-only attribute through function.
+- Example: 
+```
+@Component({
+  selector: 'app-example',
+  templateUrl: './example.component.html',
+})
+export class ExampleComponent {
+  private _price = 2000000;
+
+  // Getter
+  get formattedPrice(): string {
+    return this._price.toLocaleString('vi-VN') + ' đ';
+  }
+}
+
+ 📌 Khi nào nên dùng `getter`
+- Khi bạn muốn xử lý logic tính toán và hiển thị trong template nhưng **không muốn tạo biến trung gian.
+- Khi dữ liệu có thể thay đổi động và cần cập nhật tự động mỗi lần template truy cập.
+- Khi muốn tách logic ra khỏi template để tránh lặp lại biểu thức dài.
+```
+
+#### 16. Lifecycle in Angular
+| Phase            | Purpose                              | Key Hooks                                |
+| ---------------- | ------------------------------------ | ---------------------------------------- |
+| Creation         | Construct and initialize inputs      | `constructor`, `ngOnChanges`, `ngOnInit` |
+| Change Detection | Detect and react to changes          | `ngDoCheck`, `ngOnChanges`               |
+| Rendering        | DOM rendered; content and view ready | `ngAfterContentInit`, `ngAfterViewInit`  |
+| Destruction      | Cleanup before removal               | `ngOnDestroy`                            |
+![[Pasted image 20250618173717.png]]
+
+#### 17. Creation
+![[Pasted image 20250618175947.png]]
+
+#### 18. Change Detection (ngOnChanges, ngDoCheck)
+```
+ngOnChanges: Sẽ cập nhật và chạy lại nếu có props có sự thay đổi, hàm này sử dụng rất tốt cho Performance -> Ưu tiên
+ngDoCheck: sẽ chạy lại nếu có bất kì điều gì thay đổi (state)
+```
+
+-  ngOnChanges: Will update and re run if props has changed. This function is good for performance -> higher priority
+- Run when props re create state (assign new values)
+- ngDoCheck: Run if any thing changed (state, content, DOM,... ) -> This use for special case. Destroy when not use
+
+#### 19. Destruction (ngOnDestroy):
+- Run before component destroy
+- Realtime
+- API
+- Logic (timeout, interval...)
+
+#### 20. Http Client
+- provideHttpClient((withFetch()))
+- Use in```
+ ngOnInit(): void {
+    this.http.get<any>(...).subscribe(({data}) => ....)
+}
+ 
+#### 21. Http Service -> Optimize call API
+
+#### 22. Observable
+In Angular, an Observable is a core part of handling **asynchronous operations** — it's a feature provided by the **RxJS** (Reactive Extensions for JavaScript) library that Angular heavily relies on.
+An `Observable` is a stream of data that you can subscribe to and react when values are emitted, errors occur, or the stream completes.
+- Use to handle async data
+	- API
+	- Behavior
+	- Timer (timeout, interval...)
+```
+- Use **`Observable`** when you don't care about the past values (e.g., HTTP).
+- Use **`Subject`** to **broadcast** events to many subscribers.
+- Use **`BehaviorSubject`** to **hold and share the latest value**, perfect for state.
+- Your Observable (especially `interval` in the service) is likely running **outside Angular’s NgZone**, meaning Angular doesn’t know it should check the UI for changes.
+```
+
+#### 23. Http Pipe Methods
+Angular `HttpClient` returns `Observable`, so you can use **RxJS pipeable operators** like:
+
+```
+getProducts(): Observable<ProductItem[]> {   
+	return this.http.get<{ data: any[] }>('https://api.com/products')
+				.pipe(map(res => 
+					res.data.map(item => (
+						{id: item.id, 
+						name: item.title,       
+						description: item.author,  
+						price: Number(item.body),     
+})))   ); }
+```
+
+- `pipe()` lets you transform data with operators like `map`, `filter`, `switchMap`, `catchError`, etc.
+#### 24. Form Control
+- Basic field binding with validation:
+```nameControl = new FormControl('', Validators.required);```
+- In template:
+```<input [formControl]="nameControl" /> <div *ngIf="nameControl.invalid && nameControl.touched">Name is required.</div>```
+#### 25. Form Group
+Group multiple fields together:
+`form = new FormGroup({   
+	`name: new FormControl('', Validators.required),   
+	`price: new FormControl(0, [Validators.required, Validators.min(0)]), description: new FormControl(''), 
+});
+
+Template:
+ 
+`<form [formGroup]="form" (ngSubmit)="onSubmit()">   <input formControlName="name" />   <input formControlName="price" type="number" />   <textarea formControlName="description"></textarea>   <button type="submit">Submit</button> </form>`
+#### 26. Submit Form
+```
+onSubmit() {
+  if (this.form.valid) {
+    const product = this.form.value;
+    console.log('Form Submitted:', product);
+    // Optionally send to API
+  }
+}
+```
+#### 27. Lazy Loading
+- Angular need to compile from typescript to javascript. This is really slow. You need 1 page and don't need 99 other page. 
+-> Apply lazy load to load only page you need
+Before Lazy Load: main.js - 142kB
+After lazy loading: main.js - 105kB
+```
+  {
+    path: 'detail/:id',
+    // component: DetailComponent,
+    loadComponent: () =>
+      import('./detail/detail.component').then((m) => m.DetailComponent),
+  },
+```

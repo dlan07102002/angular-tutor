@@ -9,6 +9,8 @@ export const routes: Routes = [
   },
   {
     path: 'detail/:id',
-    component: DetailComponent,
+    // component: DetailComponent,
+    loadComponent: () =>
+      import('./detail/detail.component').then((m) => m.DetailComponent),
   },
 ];
